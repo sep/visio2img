@@ -2,7 +2,7 @@ A command line tool to export all the pages of a Visio drawing to PNG.
 
 ## Command Line Usage ##
 
-`visio2png path_to_drawing.vsd`
+`visio2img path_to_drawing.vsd`
 
 
 Accepts 1 command line argument, the file to export.
