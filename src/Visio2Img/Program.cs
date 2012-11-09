@@ -46,22 +46,14 @@ namespace Visio2Img
 
             stdout.WriteLine("Attempting export from {0}", fileName);
 
-            var visio = new Microsoft.Office.Interop.Visio.Application();
-            var document = visio.Documents.OpenEx(fileName, VisioConstants.VisOpenRo + VisioConstants.VisOpenNoWorkspace + VisioConstants.VisOpenNoWorkspace + VisioConstants.VisOpenMinimized + VisioConstants.VisOpenMacrosDisabled + VisioConstants.VisOpenHidden);
-
-            using (Disposer.Create(visio.Quit))
-            using (Disposer.Create(document.Close))
-            {
-                stdout.WriteLine("{0} pages to export", document.Pages.Count);
-                Enumerable.Range(1, document.Pages.Count).ToList().ForEach(i =>
-                {
-                    stdout.WriteLine("({0}/{1}) Exporting {2}", i, document.Pages.Count, document.Pages[i].Name);
-                    document.Pages[i].Export(string.Format(Path.Combine(outputDirectory, "{0}.png"), FixName(document.Pages[i].Name)));
-                });
-                stdout.WriteLine("Complete");
-
-                return 0;
-            }
+            var pageCount = 0;
+            new Converter().Convert(
+                fileName,
+                cnt => { stdout.WriteLine("{0} pages to export", cnt); pageCount = cnt; },
+                pageName => string.Format(Path.Combine(outputDirectory, "{0}.png"), FixName(pageName)),
+                (filename, i) => stdout.WriteLine("({0}/{1}) Exported {2}", i, pageCount, filename)
+                );
+            return 0;
         }
 
         private static string FixName(string name)
