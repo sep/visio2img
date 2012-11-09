@@ -13,23 +13,17 @@ namespace Visio2Img
 
             var inputFilename = args[0];
 
-            var options = new NDesk.Options.OptionSet
-                {
-                    {"<>", x => inputFilename = x}
-                };
 
             // Arguments
             // 0: filename
 
             if (args.Length < 1)
             {
-                PrintUsage();
                 return 1;
             }
 
             if (args.Length > 1)
             {
-                PrintUsage();
                 return 1;
             }
 
@@ -73,10 +67,6 @@ namespace Visio2Img
         private static string FixName(string name)
         {
             return Path.GetInvalidFileNameChars().Aggregate(name, (memo, invalid) => memo.Replace(invalid, '-'));
-        }
-
-        private static void PrintUsage()
-        {
         }
     }
 }
